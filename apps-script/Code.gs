@@ -224,8 +224,13 @@ function setup() {
     if (!sheet) sheet = ss.insertSheet(name);
 
     sheet.clear();
+    const numCols = SCHEMAS[name].length;
+    // Force plain-text format first so Sheets doesn't auto-coerce date/time-looking
+    // strings (e.g. "2026-10-02", "6:30 AM") into Date serial values.
+    sheet.getRange(1, 1, 1000, numCols).setNumberFormat("@");
+
     sheet.appendRow(SCHEMAS[name]);
-    sheet.getRange(1, 1, 1, SCHEMAS[name].length).setFontWeight("bold");
+    sheet.getRange(1, 1, 1, numCols).setFontWeight("bold");
 
     const rows = SEED[name];
     if (rows && rows.length) {
@@ -239,18 +244,28 @@ function setup() {
 
 function doGet(e) {
   const action = (e && e.parameter && e.parameter.action) || "data";
+  const callback = e && e.parameter && e.parameter.callback;
 
-  if (action === "data") {
-    return jsonResponse({
-      members: readSheet(SHEET_NAMES.MEMBERS),
-      sessions: readSheet(SHEET_NAMES.SESSIONS),
-      payments: readSheet(SHEET_NAMES.PAYMENTS),
-      goals: readSheet(SHEET_NAMES.GOALS),
-      rsvps: readSheet(SHEET_NAMES.RSVPS),
-    });
+  const payload =
+    action === "data"
+      ? {
+          members: readSheet(SHEET_NAMES.MEMBERS),
+          sessions: readSheet(SHEET_NAMES.SESSIONS),
+          payments: readSheet(SHEET_NAMES.PAYMENTS),
+          goals: readSheet(SHEET_NAMES.GOALS),
+          rsvps: readSheet(SHEET_NAMES.RSVPS),
+        }
+      : { ok: false, message: "Unknown action: " + action };
+
+  // JSONP fallback: browsers can't read Apps Script's redirect-based CORS
+  // response via fetch(), so serve a <script>-loadable callback instead.
+  if (callback) {
+    return ContentService.createTextOutput(
+      `${callback}(${JSON.stringify(payload)})`,
+    ).setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
 
-  return jsonResponse({ ok: false, message: "Unknown action: " + action }, 400);
+  return jsonResponse(payload);
 }
 
 function doPost(e) {
@@ -383,7 +398,8 @@ function readSheet(name) {
     .map((row) => {
       const obj = {};
       headers.forEach((header, i) => {
-        obj[header] = row[i];
+        // Guard against Sheets auto-coercing date/time-looking strings into Date cells.
+        obj[header] = row[i] instanceof Date ? row[i].toISOString() : row[i];
       });
       return obj;
     });

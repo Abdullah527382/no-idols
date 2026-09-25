@@ -8,6 +8,8 @@ import ProgressBar from "../../components/ui/ProgressBar";
 export default function MemberDashboard() {
   const { currentMember, goals } = useApp();
 
+  if (!currentMember) return null;
+
   return (
     <div className="space-y-8">
       <section className="glass-panel flex flex-col gap-4 rounded-2xl p-6 sm:flex-row sm:items-center sm:justify-between">

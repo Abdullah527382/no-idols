@@ -13,6 +13,8 @@ const DUE_OPTIONS = [
 export default function MemberPayments() {
   const { currentMember, payments } = useApp();
   const [status, setStatus] = useState(null);
+
+  if (!currentMember) return null;
   const history = payments.filter((p) => p.memberId === currentMember.id);
 
   async function handlePay(option) {

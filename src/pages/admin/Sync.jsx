@@ -6,10 +6,9 @@ import {
   CalendarPlus,
 } from "lucide-react";
 import { useApp } from "../../context/AppContext";
-import { syncWithSheets } from "../../lib/sheets";
 
 export default function AdminSync() {
-  const { members, lastSync, markSynced, logCashPayment, logAttendance } =
+  const { members, lastSync, syncNow, logCashPayment, logAttendance } =
     useApp();
   const [syncing, setSyncing] = useState(false);
 
@@ -25,8 +24,7 @@ export default function AdminSync() {
 
   async function handleSync() {
     setSyncing(true);
-    const result = await syncWithSheets();
-    markSynced(result);
+    await syncNow();
     setSyncing(false);
   }
 

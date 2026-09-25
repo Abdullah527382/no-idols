@@ -14,18 +14,27 @@ export async function syncWithSheets() {
     };
   }
 
-  const res = await fetch(`${SHEETS_WEBHOOK_URL}?action=data`);
-  const data = await res.json();
-  return {
-    ok: res.ok,
-    simulated: false,
-    data,
-    timestamp: new Date().toISOString(),
-  };
+  try {
+    // Apps Script's redirect-based response isn't readable via fetch() due to
+    // CORS (no Access-Control-Allow-Origin on the redirect hop in some
+    // browsers), so load it as JSONP via a <script> tag instead.
+    const data = await jsonpRequest(SHEETS_WEBHOOK_URL, { action: "data" });
+    return { ok: true, simulated: false, data, timestamp: new Date().toISOString() };
+  } catch (err) {
+    return {
+      ok: false,
+      simulated: false,
+      message: err.message || "Failed to sync with Google Sheets.",
+      timestamp: new Date().toISOString(),
+    };
+  }
 }
 
 // Fire-and-forget style action call against the Apps Script doPost handler
 // (logCashPayment, logAttendance, rsvp, upsertMember, upsertSession).
+// Uses mode: "no-cors" so the browser never CORS-blocks the request; the
+// response is opaque (unreadable), which is fine since callers rely on
+// optimistic local state updates rather than the server's reply.
 export async function callSheetsAction(action, payload = {}) {
   if (!SHEETS_WEBHOOK_URL) {
     await wait(400);
@@ -36,11 +45,46 @@ export async function callSheetsAction(action, payload = {}) {
     };
   }
 
-  const res = await fetch(SHEETS_WEBHOOK_URL, {
-    method: "POST",
-    body: JSON.stringify({ action, ...payload }),
+  try {
+    await fetch(SHEETS_WEBHOOK_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action, ...payload }),
+    });
+    return { ok: true, simulated: false };
+  } catch (err) {
+    return { ok: false, simulated: false, message: err.message || `Failed to run "${action}".` };
+  }
+}
+
+// Loads a URL via a <script> tag and resolves with the JSON payload passed to
+// a uniquely-named global callback. Bypasses the Same-Origin/CORS policy
+// entirely since script tags aren't subject to it (classic JSONP).
+function jsonpRequest(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    const callbackName = `sheetsCallback_${Date.now()}_${Math.floor(Math.random() * 1e6)}`;
+    const query = new URLSearchParams({ ...params, callback: callbackName }).toString();
+    const script = document.createElement("script");
+
+    const cleanup = () => {
+      delete window[callbackName];
+      script.remove();
+    };
+
+    window[callbackName] = (data) => {
+      cleanup();
+      resolve(data);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("Failed to load Google Sheets data (JSONP request failed)."));
+    };
+
+    script.src = `${url}?${query}`;
+    document.body.appendChild(script);
   });
-  return res.json();
 }
 
 function wait(ms) {
