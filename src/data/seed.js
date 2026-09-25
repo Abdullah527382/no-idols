@@ -1,0 +1,120 @@
+// Seed data simulating rows synced from the Google Sheet backend.
+
+export const seedMembers = [
+  {
+    id: 'm-001',
+    name: 'Ahmed Bilal',
+    phone: '+1 555 201 4471',
+    tier: 'No Idols Brotherhood',
+    paymentStatus: 'Paid',
+    attendanceRate: 92,
+    sessionsAttended: 11,
+    sessionsTotal: 12,
+    goalProgress: 78,
+    joined: '2025-02-01',
+  },
+  {
+    id: 'm-002',
+    name: 'Yusuf Khan',
+    phone: '+1 555 340 8821',
+    tier: 'No Idols Brotherhood',
+    paymentStatus: 'Overdue',
+    attendanceRate: 41,
+    sessionsAttended: 5,
+    sessionsTotal: 12,
+    goalProgress: 22,
+    joined: '2025-03-14',
+  },
+  {
+    id: 'm-003',
+    name: 'Ibrahim Osei',
+    phone: '+1 555 118 2290',
+    tier: 'No Idols Founding Member',
+    paymentStatus: 'Paid',
+    attendanceRate: 100,
+    sessionsAttended: 12,
+    sessionsTotal: 12,
+    goalProgress: 95,
+    joined: '2024-11-20',
+  },
+  {
+    id: 'm-004',
+    name: 'Musa Abdi',
+    phone: '+1 555 992 6634',
+    tier: 'No Idols Brotherhood',
+    paymentStatus: 'Pending',
+    attendanceRate: 66,
+    sessionsAttended: 8,
+    sessionsTotal: 12,
+    goalProgress: 54,
+    joined: '2025-01-09',
+  },
+  {
+    id: 'm-005',
+    name: 'Zayd Rahman',
+    phone: '+1 555 774 0031',
+    tier: 'No Idols Brotherhood',
+    paymentStatus: 'Overdue',
+    attendanceRate: 33,
+    sessionsAttended: 4,
+    sessionsTotal: 12,
+    goalProgress: 18,
+    joined: '2025-04-02',
+  },
+]
+
+export const seedSessions = [
+  {
+    id: 's-101',
+    title: 'Season of Dua: Presence Over Noise',
+    date: '2026-10-02',
+    time: '6:30 AM',
+    location: 'Riverside Community Hall',
+    poster: '/posters/no-idols-season-session-man-doing-dua.jpg',
+    description: 'A grounding session on discipline in worship and stillness before the dunya wakes up.',
+  },
+  {
+    id: 's-102',
+    title: 'Season of Fitness: Forge The Body',
+    date: '2026-10-09',
+    time: '5:45 AM',
+    location: 'Iron District Gym',
+    poster: '/posters/no-idols-season-fitness-session.jpg',
+    description: 'Conditioning circuit + brotherhood accountability check-in.',
+  },
+  {
+    id: 's-103',
+    title: 'No Idols: Full Season Lineup',
+    date: '2026-10-16',
+    time: '7:00 PM',
+    location: 'Downtown Chapter House',
+    poster: '/posters/no-idols-programs.jpg',
+    description: 'Overview of the season program tracks and brotherhood milestones.',
+  },
+  {
+    id: 's-104',
+    title: 'No Idols Revival Night',
+    date: '2026-10-23',
+    time: '8:00 PM',
+    location: 'The Foundry',
+    poster: '/posters/no-idols-season-event-poster-example.jpg',
+    description: 'Community revival gathering — open to all brothers and guests.',
+  },
+]
+
+export const seedPayments = [
+  { id: 'p-9001', memberId: 'm-001', memberName: 'Ahmed Bilal', amount: 40, type: 'Monthly Dues', status: 'Paid', date: '2026-09-01' },
+  { id: 'p-9002', memberId: 'm-003', memberName: 'Ibrahim Osei', amount: 40, type: 'Monthly Dues', status: 'Paid', date: '2026-09-01' },
+  { id: 'p-9003', memberId: 'm-004', memberName: 'Musa Abdi', amount: 25, type: 'Event Fee', status: 'Pending', date: '2026-09-18' },
+  { id: 'p-9004', memberId: 'm-002', memberName: 'Yusuf Khan', amount: 40, type: 'Monthly Dues', status: 'Overdue', date: '2026-08-01' },
+  { id: 'p-9005', memberId: 'm-005', memberName: 'Zayd Rahman', amount: 40, type: 'Monthly Dues', status: 'Overdue', date: '2026-08-01' },
+]
+
+export const seedGoals = [
+  { id: 'g-1', label: 'Fajr in congregation', category: 'Spiritual', target: 30, progress: 24, unit: 'days' },
+  { id: 'g-2', label: 'Quran memorization', category: 'Spiritual', target: 5, progress: 3, unit: 'pages/week' },
+  { id: 'g-3', label: 'Strength training sessions', category: 'Fitness', target: 12, progress: 9, unit: 'sessions' },
+  { id: 'g-4', label: '5k run time', category: 'Fitness', target: 25, progress: 27, unit: 'minutes' },
+]
+
+export const currentMember = seedMembers[0]
