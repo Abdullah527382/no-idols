@@ -8,50 +8,209 @@
  */
 
 const SHEET_NAMES = {
-  MEMBERS: 'Members',
-  SESSIONS: 'Sessions',
-  PAYMENTS: 'Payments',
-  GOALS: 'Goals',
-  RSVPS: 'Rsvps',
+  MEMBERS: "Members",
+  SESSIONS: "Sessions",
+  PAYMENTS: "Payments",
+  GOALS: "Goals",
+  RSVPS: "Rsvps",
 };
 
 const SCHEMAS = {
   [SHEET_NAMES.MEMBERS]: [
-    'id', 'name', 'phone', 'tier', 'paymentStatus',
-    'attendanceRate', 'sessionsAttended', 'sessionsTotal', 'goalProgress', 'joined',
+    "id",
+    "name",
+    "phone",
+    "tier",
+    "paymentStatus",
+    "attendanceRate",
+    "sessionsAttended",
+    "sessionsTotal",
+    "goalProgress",
+    "joined",
   ],
-  [SHEET_NAMES.SESSIONS]: ['id', 'title', 'date', 'time', 'location', 'poster', 'description'],
-  [SHEET_NAMES.PAYMENTS]: ['id', 'memberId', 'memberName', 'amount', 'type', 'status', 'date'],
-  [SHEET_NAMES.GOALS]: ['id', 'memberId', 'label', 'category', 'target', 'progress', 'unit'],
-  [SHEET_NAMES.RSVPS]: ['id', 'memberId', 'sessionId', 'status', 'updatedAt'],
+  [SHEET_NAMES.SESSIONS]: [
+    "id",
+    "title",
+    "date",
+    "time",
+    "location",
+    "poster",
+    "description",
+  ],
+  [SHEET_NAMES.PAYMENTS]: [
+    "id",
+    "memberId",
+    "memberName",
+    "amount",
+    "type",
+    "status",
+    "date",
+  ],
+  [SHEET_NAMES.GOALS]: [
+    "id",
+    "memberId",
+    "label",
+    "category",
+    "target",
+    "progress",
+    "unit",
+  ],
+  [SHEET_NAMES.RSVPS]: ["id", "memberId", "sessionId", "status", "updatedAt"],
 };
 
 const SEED = {
   [SHEET_NAMES.MEMBERS]: [
-    ['m-001', 'Ahmed Bilal', '+1 555 201 4471', 'No Idols Brotherhood', 'Paid', 92, 11, 12, 78, '2025-02-01'],
-    ['m-002', 'Yusuf Khan', '+1 555 340 8821', 'No Idols Brotherhood', 'Overdue', 41, 5, 12, 22, '2025-03-14'],
-    ['m-003', 'Ibrahim Osei', '+1 555 118 2290', 'No Idols Founding Member', 'Paid', 100, 12, 12, 95, '2024-11-20'],
-    ['m-004', 'Musa Abdi', '+1 555 992 6634', 'No Idols Brotherhood', 'Pending', 66, 8, 12, 54, '2025-01-09'],
-    ['m-005', 'Zayd Rahman', '+1 555 774 0031', 'No Idols Brotherhood', 'Overdue', 33, 4, 12, 18, '2025-04-02'],
+    [
+      "m-001",
+      "Ahmed Bilal",
+      "+1 555 201 4471",
+      "No Idols Brotherhood",
+      "Paid",
+      92,
+      11,
+      12,
+      78,
+      "2025-02-01",
+    ],
+    [
+      "m-002",
+      "Yusuf Khan",
+      "+1 555 340 8821",
+      "No Idols Brotherhood",
+      "Overdue",
+      41,
+      5,
+      12,
+      22,
+      "2025-03-14",
+    ],
+    [
+      "m-003",
+      "Ibrahim Osei",
+      "+1 555 118 2290",
+      "No Idols Founding Member",
+      "Paid",
+      100,
+      12,
+      12,
+      95,
+      "2024-11-20",
+    ],
+    [
+      "m-004",
+      "Musa Abdi",
+      "+1 555 992 6634",
+      "No Idols Brotherhood",
+      "Pending",
+      66,
+      8,
+      12,
+      54,
+      "2025-01-09",
+    ],
+    [
+      "m-005",
+      "Zayd Rahman",
+      "+1 555 774 0031",
+      "No Idols Brotherhood",
+      "Overdue",
+      33,
+      4,
+      12,
+      18,
+      "2025-04-02",
+    ],
   ],
   [SHEET_NAMES.SESSIONS]: [
-    ['s-101', 'Season of Dua: Presence Over Noise', '2026-10-02', '6:30 AM', 'Riverside Community Hall', '/posters/no-idols-season-session-man-doing-dua.jpg', 'A grounding session on discipline in worship and stillness before the dunya wakes up.'],
-    ['s-102', 'Season of Fitness: Forge The Body', '2026-10-09', '5:45 AM', 'Iron District Gym', '/posters/no-idols-season-fitness-session.jpg', 'Conditioning circuit + brotherhood accountability check-in.'],
-    ['s-103', 'No Idols: Full Season Lineup', '2026-10-16', '7:00 PM', 'Downtown Chapter House', '/posters/no-idols-programs.jpg', 'Overview of the season program tracks and brotherhood milestones.'],
-    ['s-104', 'No Idols Revival Night', '2026-10-23', '8:00 PM', 'The Foundry', '/posters/no-idols-season-event-poster-example.jpg', 'Community revival gathering — open to all brothers and guests.'],
+    [
+      "s-101",
+      "Season of Dua: Presence Over Noise",
+      "2026-10-02",
+      "6:30 AM",
+      "Riverside Community Hall",
+      "/posters/no-idols-season-session-man-doing-dua.jpg",
+      "A grounding session on discipline in worship and stillness before the dunya wakes up.",
+    ],
+    [
+      "s-102",
+      "Season of Fitness: Forge The Body",
+      "2026-10-09",
+      "5:45 AM",
+      "Iron District Gym",
+      "/posters/no-idols-season-fitness-session.jpg",
+      "Conditioning circuit + brotherhood accountability check-in.",
+    ],
+    [
+      "s-103",
+      "No Idols: Full Season Lineup",
+      "2026-10-16",
+      "7:00 PM",
+      "Downtown Chapter House",
+      "/posters/no-idols-programs.jpg",
+      "Overview of the season program tracks and brotherhood milestones.",
+    ],
+    [
+      "s-104",
+      "No Idols Revival Night",
+      "2026-10-23",
+      "8:00 PM",
+      "The Foundry",
+      "/posters/no-idols-season-event-poster-example.jpg",
+      "Community revival gathering — open to all brothers and guests.",
+    ],
   ],
   [SHEET_NAMES.PAYMENTS]: [
-    ['p-9001', 'm-001', 'Ahmed Bilal', 40, 'Monthly Dues', 'Paid', '2026-09-01'],
-    ['p-9002', 'm-003', 'Ibrahim Osei', 40, 'Monthly Dues', 'Paid', '2026-09-01'],
-    ['p-9003', 'm-004', 'Musa Abdi', 25, 'Event Fee', 'Pending', '2026-09-18'],
-    ['p-9004', 'm-002', 'Yusuf Khan', 40, 'Monthly Dues', 'Overdue', '2026-08-01'],
-    ['p-9005', 'm-005', 'Zayd Rahman', 40, 'Monthly Dues', 'Overdue', '2026-08-01'],
+    [
+      "p-9001",
+      "m-001",
+      "Ahmed Bilal",
+      40,
+      "Monthly Dues",
+      "Paid",
+      "2026-09-01",
+    ],
+    [
+      "p-9002",
+      "m-003",
+      "Ibrahim Osei",
+      40,
+      "Monthly Dues",
+      "Paid",
+      "2026-09-01",
+    ],
+    ["p-9003", "m-004", "Musa Abdi", 25, "Event Fee", "Pending", "2026-09-18"],
+    [
+      "p-9004",
+      "m-002",
+      "Yusuf Khan",
+      40,
+      "Monthly Dues",
+      "Overdue",
+      "2026-08-01",
+    ],
+    [
+      "p-9005",
+      "m-005",
+      "Zayd Rahman",
+      40,
+      "Monthly Dues",
+      "Overdue",
+      "2026-08-01",
+    ],
   ],
   [SHEET_NAMES.GOALS]: [
-    ['g-1', 'm-001', 'Fajr in congregation', 'Spiritual', 30, 24, 'days'],
-    ['g-2', 'm-001', 'Quran memorization', 'Spiritual', 5, 3, 'pages/week'],
-    ['g-3', 'm-001', 'Strength training sessions', 'Fitness', 12, 9, 'sessions'],
-    ['g-4', 'm-001', '5k run time', 'Fitness', 25, 27, 'minutes'],
+    ["g-1", "m-001", "Fajr in congregation", "Spiritual", 30, 24, "days"],
+    ["g-2", "m-001", "Quran memorization", "Spiritual", 5, 3, "pages/week"],
+    [
+      "g-3",
+      "m-001",
+      "Strength training sessions",
+      "Fitness",
+      12,
+      9,
+      "sessions",
+    ],
+    ["g-4", "m-001", "5k run time", "Fitness", 25, 27, "minutes"],
   ],
   [SHEET_NAMES.RSVPS]: [],
 };
@@ -66,7 +225,7 @@ function setup() {
 
     sheet.clear();
     sheet.appendRow(SCHEMAS[name]);
-    sheet.getRange(1, 1, 1, SCHEMAS[name].length).setFontWeight('bold');
+    sheet.getRange(1, 1, 1, SCHEMAS[name].length).setFontWeight("bold");
 
     const rows = SEED[name];
     if (rows && rows.length) {
@@ -74,14 +233,14 @@ function setup() {
     }
   });
 
-  const defaultSheet = ss.getSheetByName('Sheet1');
+  const defaultSheet = ss.getSheetByName("Sheet1");
   if (defaultSheet) ss.deleteSheet(defaultSheet);
 }
 
 function doGet(e) {
-  const action = (e && e.parameter && e.parameter.action) || 'data';
+  const action = (e && e.parameter && e.parameter.action) || "data";
 
-  if (action === 'data') {
+  if (action === "data") {
     return jsonResponse({
       members: readSheet(SHEET_NAMES.MEMBERS),
       sessions: readSheet(SHEET_NAMES.SESSIONS),
@@ -91,7 +250,7 @@ function doGet(e) {
     });
   }
 
-  return jsonResponse({ ok: false, message: 'Unknown action: ' + action }, 400);
+  return jsonResponse({ ok: false, message: "Unknown action: " + action }, 400);
 }
 
 function doPost(e) {
@@ -99,42 +258,57 @@ function doPost(e) {
   try {
     body = JSON.parse(e.postData.contents);
   } catch (err) {
-    return jsonResponse({ ok: false, message: 'Invalid JSON body' }, 400);
+    return jsonResponse({ ok: false, message: "Invalid JSON body" }, 400);
   }
 
   const action = body.action;
 
   switch (action) {
-    case 'logCashPayment':
+    case "logCashPayment":
       return jsonResponse(logCashPayment(body));
-    case 'logAttendance':
+    case "logAttendance":
       return jsonResponse(logAttendance(body));
-    case 'rsvp':
+    case "rsvp":
       return jsonResponse(upsertRsvp(body));
-    case 'upsertMember':
+    case "upsertMember":
       return jsonResponse(upsertMember(body));
-    case 'upsertSession':
+    case "upsertSession":
       return jsonResponse(upsertSession(body));
     default:
-      return jsonResponse({ ok: false, message: 'Unknown action: ' + action }, 400);
+      return jsonResponse(
+        { ok: false, message: "Unknown action: " + action },
+        400,
+      );
   }
 }
 
 function logCashPayment({ memberId, amount, type }) {
   const sheet = getSheet(SHEET_NAMES.PAYMENTS);
-  const id = 'p-' + Date.now();
+  const id = "p-" + Date.now();
   const memberName = getRowById(SHEET_NAMES.MEMBERS, memberId).name;
-  const date = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  const date = Utilities.formatDate(
+    new Date(),
+    Session.getScriptTimeZone(),
+    "yyyy-MM-dd",
+  );
 
-  sheet.appendRow([id, memberId, memberName, Number(amount), type || 'Cash Payment', 'Paid', date]);
-  updateRowById(SHEET_NAMES.MEMBERS, memberId, { paymentStatus: 'Paid' });
+  sheet.appendRow([
+    id,
+    memberId,
+    memberName,
+    Number(amount),
+    type || "Cash Payment",
+    "Paid",
+    date,
+  ]);
+  updateRowById(SHEET_NAMES.MEMBERS, memberId, { paymentStatus: "Paid" });
 
   return { ok: true, id };
 }
 
 function logAttendance({ memberId }) {
   const member = getRowById(SHEET_NAMES.MEMBERS, memberId);
-  if (!member) return { ok: false, message: 'Member not found' };
+  if (!member) return { ok: false, message: "Member not found" };
 
   const attended = Math.min(member.sessionsAttended + 1, member.sessionsTotal);
   const rate = Math.round((attended / member.sessionsTotal) * 100);
@@ -150,11 +324,19 @@ function logAttendance({ memberId }) {
 function upsertRsvp({ memberId, sessionId, status }) {
   const sheet = getSheet(SHEET_NAMES.RSVPS);
   const rows = readSheet(SHEET_NAMES.RSVPS);
-  const existingIndex = rows.findIndex((r) => r.memberId === memberId && r.sessionId === sessionId);
+  const existingIndex = rows.findIndex(
+    (r) => r.memberId === memberId && r.sessionId === sessionId,
+  );
   const updatedAt = new Date().toISOString();
 
   if (existingIndex === -1) {
-    sheet.appendRow(['r-' + Date.now(), memberId, sessionId, status, updatedAt]);
+    sheet.appendRow([
+      "r-" + Date.now(),
+      memberId,
+      sessionId,
+      status,
+      updatedAt,
+    ]);
   } else {
     const rowNumber = existingIndex + 2; // +1 header, +1 1-indexed
     sheet.getRange(rowNumber, 4, 1, 2).setValues([[status, updatedAt]]);
@@ -197,10 +379,12 @@ function readSheet(name) {
   const [headers, ...rows] = values;
 
   return rows
-    .filter((row) => row.some((cell) => cell !== ''))
+    .filter((row) => row.some((cell) => cell !== ""))
     .map((row) => {
       const obj = {};
-      headers.forEach((header, i) => { obj[header] = row[i]; });
+      headers.forEach((header, i) => {
+        obj[header] = row[i];
+      });
       return obj;
     });
 }
@@ -212,7 +396,7 @@ function getRowById(sheetName, id) {
 function updateRowById(sheetName, id, patch) {
   const sheet = getSheet(sheetName);
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-  const idCol = headers.indexOf('id');
+  const idCol = headers.indexOf("id");
   const data = sheet.getDataRange().getValues();
 
   for (let r = 1; r < data.length; r++) {
@@ -231,9 +415,11 @@ function updateRowById(sheetName, id, patch) {
 function appendRowFromObject(sheetName, obj) {
   const sheet = getSheet(sheetName);
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-  sheet.appendRow(headers.map((header) => obj[header] ?? ''));
+  sheet.appendRow(headers.map((header) => obj[header] ?? ""));
 }
 
 function jsonResponse(data) {
-  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(
+    ContentService.MimeType.JSON,
+  );
 }

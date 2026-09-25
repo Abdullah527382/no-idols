@@ -29,7 +29,11 @@ export async function syncWithSheets() {
 export async function callSheetsAction(action, payload = {}) {
   if (!SHEETS_WEBHOOK_URL) {
     await wait(400);
-    return { ok: true, simulated: true, message: `Simulated "${action}" (no webhook configured).` };
+    return {
+      ok: true,
+      simulated: true,
+      message: `Simulated "${action}" (no webhook configured).`,
+    };
   }
 
   const res = await fetch(SHEETS_WEBHOOK_URL, {
