@@ -19,7 +19,12 @@ export async function syncWithSheets() {
     // CORS (no Access-Control-Allow-Origin on the redirect hop in some
     // browsers), so load it as JSONP via a <script> tag instead.
     const data = await jsonpRequest(SHEETS_WEBHOOK_URL, { action: "data" });
-    return { ok: true, simulated: false, data, timestamp: new Date().toISOString() };
+    return {
+      ok: true,
+      simulated: false,
+      data,
+      timestamp: new Date().toISOString(),
+    };
   } catch (err) {
     return {
       ok: false,
@@ -54,7 +59,11 @@ export async function callSheetsAction(action, payload = {}) {
     });
     return { ok: true, simulated: false };
   } catch (err) {
-    return { ok: false, simulated: false, message: err.message || `Failed to run "${action}".` };
+    return {
+      ok: false,
+      simulated: false,
+      message: err.message || `Failed to run "${action}".`,
+    };
   }
 }
 
@@ -64,7 +73,10 @@ export async function callSheetsAction(action, payload = {}) {
 function jsonpRequest(url, params = {}) {
   return new Promise((resolve, reject) => {
     const callbackName = `sheetsCallback_${Date.now()}_${Math.floor(Math.random() * 1e6)}`;
-    const query = new URLSearchParams({ ...params, callback: callbackName }).toString();
+    const query = new URLSearchParams({
+      ...params,
+      callback: callbackName,
+    }).toString();
     const script = document.createElement("script");
 
     const cleanup = () => {
@@ -79,7 +91,9 @@ function jsonpRequest(url, params = {}) {
 
     script.onerror = () => {
       cleanup();
-      reject(new Error("Failed to load Google Sheets data (JSONP request failed)."));
+      reject(
+        new Error("Failed to load Google Sheets data (JSONP request failed)."),
+      );
     };
 
     script.src = `${url}?${query}`;
