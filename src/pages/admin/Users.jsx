@@ -1,38 +1,46 @@
-import { useState } from 'react'
-import { UserPlus, Check, X, ShieldCheck, Users as UsersIcon } from 'lucide-react'
-import { useApp } from '../../context/AppContext'
-import Badge from '../../components/ui/Badge'
+import { useState } from "react";
+import {
+  UserPlus,
+  Check,
+  X,
+  ShieldCheck,
+  Users as UsersIcon,
+} from "lucide-react";
+import { useApp } from "../../context/AppContext";
+import Badge from "../../components/ui/Badge";
 
 export default function AdminUsers() {
-  const { users, approveUser, rejectUser, inviteUser } = useApp()
-  const [form, setForm] = useState({ name: '', email: '', role: 'member' })
-  const [toast, setToast] = useState(null)
+  const { users, approveUser, rejectUser, inviteUser } = useApp();
+  const [form, setForm] = useState({ name: "", email: "", role: "member" });
+  const [toast, setToast] = useState(null);
 
-  const pending = users.filter((u) => u.status === 'Pending')
+  const pending = users.filter((u) => u.status === "Pending");
 
   async function handleInvite(e) {
-    e.preventDefault()
-    if (!form.name || !form.email) return
-    await inviteUser(form)
-    setToast(`${form.name} added and approved.`)
-    setForm({ name: '', email: '', role: 'member' })
+    e.preventDefault();
+    if (!form.name || !form.email) return;
+    await inviteUser(form);
+    setToast(`${form.name} added and approved.`);
+    setForm({ name: "", email: "", role: "member" });
   }
 
   async function handleApprove(email) {
-    await approveUser(email)
-    setToast(`${email} approved.`)
+    await approveUser(email);
+    setToast(`${email} approved.`);
   }
 
   async function handleReject(email) {
-    await rejectUser(email)
-    setToast(`${email} rejected.`)
+    await rejectUser(email);
+    setToast(`${email} rejected.`);
   }
 
   return (
     <div className="space-y-8">
       <section>
         <h1 className="font-display text-3xl">User Management</h1>
-        <p className="mt-1 text-sm text-white/50">Pre-approve members or review sign-ups waiting for access.</p>
+        <p className="mt-1 text-sm text-white/50">
+          Pre-approve members or review sign-ups waiting for access.
+        </p>
       </section>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -47,7 +55,9 @@ export default function AdminUsers() {
               required
               placeholder="Full name"
               value={form.name}
-              onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, name: e.target.value }))
+              }
               className="input-field"
             />
             <input
@@ -55,12 +65,16 @@ export default function AdminUsers() {
               required
               placeholder="email@example.com"
               value={form.email}
-              onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, email: e.target.value }))
+              }
               className="input-field"
             />
             <select
               value={form.role}
-              onChange={(e) => setForm((prev) => ({ ...prev, role: e.target.value }))}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, role: e.target.value }))
+              }
               className="input-field"
             >
               <option value="member">Member</option>
@@ -79,13 +93,22 @@ export default function AdminUsers() {
             <h2 className="font-display text-xl">Approve / Reject Queue</h2>
           </div>
 
-          {pending.length === 0 && <p className="text-sm text-white/40">No sign-ups waiting for approval.</p>}
+          {pending.length === 0 && (
+            <p className="text-sm text-white/40">
+              No sign-ups waiting for approval.
+            </p>
+          )}
 
           <div className="space-y-3">
             {pending.map((user) => (
-              <div key={user.email} className="flex items-center justify-between rounded-lg border border-line bg-charcoal px-4 py-3">
+              <div
+                key={user.email}
+                className="flex items-center justify-between rounded-lg border border-line bg-charcoal px-4 py-3"
+              >
                 <div>
-                  <p className="text-sm font-semibold text-white">{user.name}</p>
+                  <p className="text-sm font-semibold text-white">
+                    {user.name}
+                  </p>
                   <p className="text-xs text-white/40">{user.email}</p>
                 </div>
                 <div className="flex gap-2">
@@ -127,12 +150,23 @@ export default function AdminUsers() {
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user.email} className="border-b border-line/60 last:border-0">
+                <tr
+                  key={user.email}
+                  className="border-b border-line/60 last:border-0"
+                >
                   <td className="py-3 text-white">{user.name}</td>
                   <td className="py-3 text-white/60">{user.email}</td>
                   <td className="py-3 text-white/60 capitalize">{user.role}</td>
                   <td className="py-3">
-                    <Badge status={user.status === 'Approved' ? 'Paid' : user.status === 'Rejected' ? 'Overdue' : 'Pending'}>
+                    <Badge
+                      status={
+                        user.status === "Approved"
+                          ? "Paid"
+                          : user.status === "Rejected"
+                            ? "Overdue"
+                            : "Pending"
+                      }
+                    >
                       {user.status}
                     </Badge>
                   </td>
@@ -150,5 +184,5 @@ export default function AdminUsers() {
         </div>
       </section>
     </div>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { Clock, LogOut } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
-import { useApp } from '../context/AppContext'
+import { Clock, LogOut } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { useApp } from "../context/AppContext";
 
 export default function PendingApproval() {
-  const { logOut } = useAuth()
-  const { profile } = useApp()
+  const { logOut } = useAuth();
+  const { profile } = useApp();
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-4 text-center">
@@ -13,12 +13,13 @@ export default function PendingApproval() {
       </div>
       <h1 className="font-display text-3xl">Account Pending Approval</h1>
       <p className="max-w-md text-sm text-white/50">
-        Thanks for joining, {profile?.name || 'brother'}. An admin needs to approve your account before you can access
-        the member portal. Check back soon or reach out to Harris Ahmed.
+        Thanks for joining, {profile?.name || "brother"}. An admin needs to
+        approve your account before you can access the member portal. Check back
+        soon or reach out to Harris Ahmed.
       </p>
       <button type="button" onClick={logOut} className="btn-ghost mt-2">
         <LogOut className="h-4 w-4" /> Sign out
       </button>
     </div>
-  )
+  );
 }
