@@ -15,7 +15,7 @@ export default function AdminSync() {
   const [cashForm, setCashForm] = useState({
     memberId: members[0]?.id ?? "",
     amount: "",
-    type: "Monthly Dues",
+    type: "Adult Session",
   });
   const [attendanceForm, setAttendanceForm] = useState({
     memberId: members[0]?.id ?? "",
@@ -107,9 +107,9 @@ export default function AdminSync() {
               }
               className="input-field"
             >
-              <option>Monthly Dues</option>
-              <option>Event Fee</option>
-              <option>Brotherhood Gear</option>
+              <option>Adult Session</option>
+              <option>Child Session</option>
+              <option>Bulk Pass (10 sessions)</option>
             </select>
             <input
               type="number"

@@ -1,36 +1,40 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import { Flame, AlertTriangle } from "lucide-react";
-import { AppProvider, useApp } from "./context/AppContext";
-import Login from "./pages/Login";
-import MemberPortal from "./pages/MemberPortal";
-import MemberDashboard from "./pages/member/Dashboard";
-import MemberPayments from "./pages/member/Payments";
-import MemberSessions from "./pages/member/Sessions";
-import AdminPortal from "./pages/AdminPortal";
-import AdminMembers from "./pages/admin/Members";
-import AdminPosters from "./pages/admin/Posters";
-import AdminSync from "./pages/admin/Sync";
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { Flame, AlertTriangle } from 'lucide-react'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import { AppProvider, useApp } from './context/AppContext'
+import ProtectedRoute from './components/ProtectedRoute'
+import Login from './pages/Login'
+import PendingApproval from './pages/PendingApproval'
+import MemberPortal from './pages/MemberPortal'
+import MemberDashboard from './pages/member/Dashboard'
+import MemberPayments from './pages/member/Payments'
+import MemberSessions from './pages/member/Sessions'
+import AdminPortal from './pages/AdminPortal'
+import AdminMembers from './pages/admin/Members'
+import AdminUsers from './pages/admin/Users'
+import AdminSync from './pages/admin/Sync'
 
 function App() {
   return (
-    <AppProvider>
-      <AppRoutes />
-    </AppProvider>
-  );
+    <AuthProvider>
+      <AppProvider>
+        <AppRoutes />
+      </AppProvider>
+    </AuthProvider>
+  )
 }
 
 function AppRoutes() {
-  const { isLoading, error, members } = useApp();
+  const { authLoading } = useAuth()
+  const { isLoading, error, members } = useApp()
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-3 text-white/60">
         <Flame className="h-8 w-8 animate-pulse text-ember" />
-        <p className="text-sm">
-          Loading brotherhood data from Google Sheets...
-        </p>
+        <p className="text-sm">Loading brotherhood data...</p>
       </div>
-    );
+    )
   }
 
   if (error && members.length === 0) {
@@ -39,28 +43,43 @@ function AppRoutes() {
         <AlertTriangle className="h-8 w-8 text-blood-light" />
         <p className="max-w-md text-sm">{error}</p>
       </div>
-    );
+    )
   }
 
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/pending" element={<PendingApproval />} />
 
-      <Route path="/member" element={<MemberPortal />}>
+      <Route
+        path="/member"
+        element={
+          <ProtectedRoute>
+            <MemberPortal />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<MemberDashboard />} />
         <Route path="payments" element={<MemberPayments />} />
         <Route path="sessions" element={<MemberSessions />} />
       </Route>
 
-      <Route path="/admin" element={<AdminPortal />}>
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requireAdmin>
+            <AdminPortal />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<AdminMembers />} />
-        <Route path="posters" element={<AdminPosters />} />
+        <Route path="users" element={<AdminUsers />} />
         <Route path="sync" element={<AdminSync />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  );
+  )
 }
 
-export default App;
+export default App

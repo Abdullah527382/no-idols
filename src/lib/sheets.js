@@ -1,6 +1,6 @@
 // Backed by the Apps Script web app in apps-script/Code.gs. Deploy that
-// script and set VITE_SHEETS_WEBHOOK_URL to its /exec URL to go live.
-const SHEETS_WEBHOOK_URL = import.meta.env.VITE_SHEETS_WEBHOOK_URL || "";
+// script and set VITE_GOOGLE_SHEETS_WEBHOOK_URL to its /exec URL to go live.
+const SHEETS_WEBHOOK_URL = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL || "";
 
 export async function syncWithSheets() {
   if (!SHEETS_WEBHOOK_URL) {

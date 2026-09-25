@@ -1,14 +1,16 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { Flame, Users, ShieldCheck, LogOut } from "lucide-react";
-import { useApp } from "../context/AppContext";
+import { NavLink, useNavigate } from 'react-router-dom'
+import { Flame, Users, ShieldCheck, LogOut } from 'lucide-react'
+import { useApp } from '../context/AppContext'
+import { useAuth } from '../context/AuthContext'
 
 export default function Layout({ children, nav }) {
-  const { role, setRole } = useApp();
-  const navigate = useNavigate();
+  const { profile } = useApp()
+  const { logOut } = useAuth()
+  const navigate = useNavigate()
 
-  function switchRole(nextRole) {
-    setRole(nextRole);
-    navigate(nextRole === "admin" ? "/admin" : "/member");
+  async function handleSignOut() {
+    await logOut()
+    navigate('/')
   }
 
   return (
@@ -19,33 +21,26 @@ export default function Layout({ children, nav }) {
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-ember/15 text-ember">
               <Flame className="h-4.5 w-4.5" />
             </div>
-            <span className="font-display text-lg tracking-widest">
-              NO IDOLS
-            </span>
+            <span className="font-display text-lg tracking-widest">NO IDOLS</span>
           </div>
 
-          <div className="flex items-center gap-2 rounded-lg border border-line bg-surface p-1">
-            <RoleButton
-              active={role === "member"}
-              onClick={() => switchRole("member")}
-              icon={Users}
-              label="Member"
-            />
-            <RoleButton
-              active={role === "admin"}
-              onClick={() => switchRole("admin")}
-              icon={ShieldCheck}
-              label="Admin"
-            />
-          </div>
+          {profile?.isAdmin && (
+            <div className="flex items-center gap-2 rounded-lg border border-line bg-surface p-1">
+              <ViewButton to="/member" icon={Users} label="Member" />
+              <ViewButton to="/admin" icon={ShieldCheck} label="Admin" />
+            </div>
+          )}
 
-          <button
-            type="button"
-            onClick={() => navigate("/")}
-            className="hidden items-center gap-1.5 text-xs font-semibold text-white/40 hover:text-white/70 sm:inline-flex"
-          >
-            <LogOut className="h-3.5 w-3.5" /> Sign out
-          </button>
+          <div className="flex items-center gap-3">
+            {profile?.name && <span className="hidden text-xs text-white/40 sm:inline">{profile.name}</span>}
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/40 hover:text-white/70"
+            >
+              <LogOut className="h-3.5 w-3.5" /> Sign out
+            </button>
+          </div>
         </div>
 
         {nav && (
@@ -58,9 +53,7 @@ export default function Layout({ children, nav }) {
                   end={item.end}
                   className={({ isActive }) =>
                     `whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-semibold transition ${
-                      isActive
-                        ? "bg-ember text-ink"
-                        : "text-white/50 hover:bg-white/5 hover:text-white/80"
+                      isActive ? 'bg-ember text-ink' : 'text-white/50 hover:bg-white/5 hover:text-white/80'
                     }`
                   }
                 >
@@ -74,19 +67,20 @@ export default function Layout({ children, nav }) {
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">{children}</main>
     </div>
-  );
+  )
 }
 
-function RoleButton({ active, onClick, icon: Icon, label }) {
+function ViewButton({ to, icon: Icon, label }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold uppercase tracking-wide transition ${
-        active ? "bg-ember text-ink" : "text-white/50 hover:text-white/80"
-      }`}
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold uppercase tracking-wide transition ${
+          isActive ? 'bg-ember text-ink' : 'text-white/50 hover:text-white/80'
+        }`
+      }
     >
       <Icon className="h-3.5 w-3.5" /> {label}
-    </button>
-  );
+    </NavLink>
+  )
 }

@@ -3,33 +3,33 @@ import { useApp } from "../../context/AppContext";
 import { TierBadge } from "../../components/ui/Badge";
 import Badge from "../../components/ui/Badge";
 import StatCard from "../../components/ui/StatCard";
-import ProgressBar from "../../components/ui/ProgressBar";
+import GoalManager from "../../components/GoalManager";
 
 export default function MemberDashboard() {
-  const { currentMember, goals } = useApp();
+  const { currentMember } = useApp();
 
   if (!currentMember) return null;
 
   return (
     <div className="space-y-8">
-      <section className="glass-panel flex flex-col gap-4 rounded-2xl p-6 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-white/40">
-            Welcome back
-          </p>
-          <h1 className="mt-1 font-display text-3xl">{currentMember.name}</h1>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <TierBadge tier={currentMember.tier} />
-            <Badge status={currentMember.paymentStatus} />
+      <section
+        className="glass-panel relative overflow-hidden rounded-2xl bg-cover bg-center p-6"
+        style={{ backgroundImage: "url('/posters/no-idols-season-fitness-session.jpg')" }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
+        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-white/40">Welcome back</p>
+            <h1 className="mt-1 font-display text-3xl">{currentMember.name}</h1>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <TierBadge tier={currentMember.tier} />
+              <Badge status={currentMember.paymentStatus} />
+            </div>
           </div>
-        </div>
-        <div className="text-right">
-          <p className="text-xs uppercase tracking-wider text-white/40">
-            Member since
-          </p>
-          <p className="font-display text-xl text-white/80">
-            {currentMember.joined}
-          </p>
+          <div className="text-right">
+            <p className="text-xs uppercase tracking-wider text-white/40">Member since</p>
+            <p className="font-display text-xl text-white/80">{currentMember.joined}</p>
+          </div>
         </div>
       </section>
 
@@ -51,7 +51,7 @@ export default function MemberDashboard() {
           icon={Flame}
           label="Payment status"
           value={currentMember.paymentStatus}
-          sub="Monthly dues"
+          sub="Per-session dues"
           accent={currentMember.paymentStatus === "Overdue" ? "blood" : "ember"}
         />
       </section>
@@ -61,28 +61,7 @@ export default function MemberDashboard() {
           <TrendingUp className="h-4.5 w-4.5 text-ember" />
           <h2 className="font-display text-xl">Growth & Fitness Goals</h2>
         </div>
-        <div className="space-y-5">
-          {goals.map((goal) => (
-            <div key={goal.id}>
-              <div className="mb-1.5 flex items-center justify-between text-sm">
-                <span className="font-semibold text-white/80">
-                  {goal.label}
-                </span>
-                <span className="text-white/40">
-                  {goal.progress}/{goal.target} {goal.unit}
-                </span>
-              </div>
-              <ProgressBar
-                value={goal.progress}
-                max={goal.target}
-                accent={goal.category === "Fitness" ? "blood" : "brass"}
-              />
-              <p className="mt-1 text-[11px] uppercase tracking-wide text-white/30">
-                {goal.category}
-              </p>
-            </div>
-          ))}
-        </div>
+        <GoalManager />
       </section>
     </div>
   );
