@@ -1,56 +1,80 @@
-import { useState } from 'react'
-import { RefreshCw, CheckCircle2, DollarSign, CalendarPlus } from 'lucide-react'
-import { useApp } from '../../context/AppContext'
-import { syncWithSheets } from '../../lib/sheets'
+import { useState } from "react";
+import {
+  RefreshCw,
+  CheckCircle2,
+  DollarSign,
+  CalendarPlus,
+} from "lucide-react";
+import { useApp } from "../../context/AppContext";
+import { syncWithSheets } from "../../lib/sheets";
 
 export default function AdminSync() {
-  const { members, lastSync, markSynced, logCashPayment, logAttendance } = useApp()
-  const [syncing, setSyncing] = useState(false)
+  const { members, lastSync, markSynced, logCashPayment, logAttendance } =
+    useApp();
+  const [syncing, setSyncing] = useState(false);
 
-  const [cashForm, setCashForm] = useState({ memberId: members[0]?.id ?? '', amount: '', type: 'Monthly Dues' })
-  const [attendanceForm, setAttendanceForm] = useState({ memberId: members[0]?.id ?? '' })
-  const [toast, setToast] = useState(null)
+  const [cashForm, setCashForm] = useState({
+    memberId: members[0]?.id ?? "",
+    amount: "",
+    type: "Monthly Dues",
+  });
+  const [attendanceForm, setAttendanceForm] = useState({
+    memberId: members[0]?.id ?? "",
+  });
+  const [toast, setToast] = useState(null);
 
   async function handleSync() {
-    setSyncing(true)
-    const result = await syncWithSheets()
-    markSynced(result)
-    setSyncing(false)
+    setSyncing(true);
+    const result = await syncWithSheets();
+    markSynced(result);
+    setSyncing(false);
   }
 
   function handleCashSubmit(e) {
-    e.preventDefault()
-    if (!cashForm.amount) return
-    logCashPayment(cashForm)
-    setToast('Cash payment logged and marked as Paid.')
-    setCashForm((prev) => ({ ...prev, amount: '' }))
+    e.preventDefault();
+    if (!cashForm.amount) return;
+    logCashPayment(cashForm);
+    setToast("Cash payment logged and marked as Paid.");
+    setCashForm((prev) => ({ ...prev, amount: "" }));
   }
 
   function handleAttendanceSubmit(e) {
-    e.preventDefault()
-    logAttendance(attendanceForm)
-    setToast('Off-platform session check-in recorded.')
+    e.preventDefault();
+    logAttendance(attendanceForm);
+    setToast("Off-platform session check-in recorded.");
   }
 
   return (
     <div className="space-y-8">
       <section>
         <h1 className="font-display text-3xl">Google Sheets Sync Console</h1>
-        <p className="mt-1 text-sm text-white/50">Keep the member sheet, attendance log, and payment ledger in sync.</p>
+        <p className="mt-1 text-sm text-white/50">
+          Keep the member sheet, attendance log, and payment ledger in sync.
+        </p>
       </section>
 
       <section className="glass-panel flex flex-col items-start justify-between gap-4 rounded-2xl p-6 sm:flex-row sm:items-center">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-white/40">Connection status</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white/40">
+            Connection status
+          </p>
           <p className="mt-1 flex items-center gap-2 font-display text-xl">
             <CheckCircle2 className="h-5 w-5 text-emerald-400" /> Connected
           </p>
           <p className="mt-1 text-xs text-white/40">
-            {lastSync ? `Last synced ${new Date(lastSync.timestamp).toLocaleString()}` : 'Not synced yet this session.'}
+            {lastSync
+              ? `Last synced ${new Date(lastSync.timestamp).toLocaleString()}`
+              : "Not synced yet this session."}
           </p>
         </div>
-        <button type="button" onClick={handleSync} disabled={syncing} className="btn-ember">
-          <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} /> {syncing ? 'Syncing...' : 'Sync now'}
+        <button
+          type="button"
+          onClick={handleSync}
+          disabled={syncing}
+          className="btn-ember"
+        >
+          <RefreshCw className={`h-4 w-4 ${syncing ? "animate-spin" : ""}`} />{" "}
+          {syncing ? "Syncing..." : "Sync now"}
         </button>
       </section>
 
@@ -67,7 +91,9 @@ export default function AdminSync() {
           <form onSubmit={handleCashSubmit} className="space-y-3">
             <select
               value={cashForm.memberId}
-              onChange={(e) => setCashForm((prev) => ({ ...prev, memberId: e.target.value }))}
+              onChange={(e) =>
+                setCashForm((prev) => ({ ...prev, memberId: e.target.value }))
+              }
               className="input-field"
             >
               {members.map((m) => (
@@ -78,7 +104,9 @@ export default function AdminSync() {
             </select>
             <select
               value={cashForm.type}
-              onChange={(e) => setCashForm((prev) => ({ ...prev, type: e.target.value }))}
+              onChange={(e) =>
+                setCashForm((prev) => ({ ...prev, type: e.target.value }))
+              }
               className="input-field"
             >
               <option>Monthly Dues</option>
@@ -91,7 +119,9 @@ export default function AdminSync() {
               step="0.01"
               placeholder="Amount ($)"
               value={cashForm.amount}
-              onChange={(e) => setCashForm((prev) => ({ ...prev, amount: e.target.value }))}
+              onChange={(e) =>
+                setCashForm((prev) => ({ ...prev, amount: e.target.value }))
+              }
               className="input-field"
               required
             />
@@ -118,7 +148,10 @@ export default function AdminSync() {
                 </option>
               ))}
             </select>
-            <p className="text-xs text-white/40">Records attendance for a session that happened offline or wasn't RSVP'd in-app.</p>
+            <p className="text-xs text-white/40">
+              Records attendance for a session that happened offline or wasn't
+              RSVP'd in-app.
+            </p>
             <button type="submit" className="btn-ghost w-full">
               Record check-in
             </button>
@@ -132,5 +165,5 @@ export default function AdminSync() {
         </div>
       )}
     </div>
-  )
+  );
 }

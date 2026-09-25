@@ -1,48 +1,73 @@
-import { useMemo, useState } from 'react'
-import { MessageCircle, Search, Users, DollarSign, CalendarX, ShieldCheck } from 'lucide-react'
-import { useApp } from '../../context/AppContext'
-import Badge, { TierBadge } from '../../components/ui/Badge'
-import StatCard from '../../components/ui/StatCard'
-import ProgressBar from '../../components/ui/ProgressBar'
-import { buildWhatsAppNudge } from '../../lib/whatsapp'
+import { useMemo, useState } from "react";
+import {
+  MessageCircle,
+  Search,
+  Users,
+  DollarSign,
+  CalendarX,
+  ShieldCheck,
+} from "lucide-react";
+import { useApp } from "../../context/AppContext";
+import Badge, { TierBadge } from "../../components/ui/Badge";
+import StatCard from "../../components/ui/StatCard";
+import ProgressBar from "../../components/ui/ProgressBar";
+import { buildWhatsAppNudge } from "../../lib/whatsapp";
 
 const FILTERS = [
-  { id: 'all', label: 'All members' },
-  { id: 'unpaid', label: 'Unpaid dues' },
-  { id: 'missed', label: 'Missed sessions' },
-]
+  { id: "all", label: "All members" },
+  { id: "unpaid", label: "Unpaid dues" },
+  { id: "missed", label: "Missed sessions" },
+];
 
 export default function AdminMembers() {
-  const { members } = useApp()
-  const [filter, setFilter] = useState('all')
-  const [query, setQuery] = useState('')
+  const { members } = useApp();
+  const [filter, setFilter] = useState("all");
+  const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
     return members
       .filter((m) => m.name.toLowerCase().includes(query.toLowerCase()))
       .filter((m) => {
-        if (filter === 'unpaid') return m.paymentStatus !== 'Paid'
-        if (filter === 'missed') return m.attendanceRate < 60
-        return true
-      })
-  }, [members, filter, query])
+        if (filter === "unpaid") return m.paymentStatus !== "Paid";
+        if (filter === "missed") return m.attendanceRate < 60;
+        return true;
+      });
+  }, [members, filter, query]);
 
-  const unpaidCount = members.filter((m) => m.paymentStatus !== 'Paid').length
-  const missedCount = members.filter((m) => m.attendanceRate < 60).length
-  const avgGoal = Math.round(members.reduce((sum, m) => sum + m.goalProgress, 0) / members.length)
+  const unpaidCount = members.filter((m) => m.paymentStatus !== "Paid").length;
+  const missedCount = members.filter((m) => m.attendanceRate < 60).length;
+  const avgGoal = Math.round(
+    members.reduce((sum, m) => sum + m.goalProgress, 0) / members.length,
+  );
 
   return (
     <div className="space-y-8">
       <section>
         <h1 className="font-display text-3xl">Member Directory</h1>
-        <p className="mt-1 text-sm text-white/50">Financial overview, attendance, and goal tracking for Harris Ahmed.</p>
+        <p className="mt-1 text-sm text-white/50">
+          Financial overview, attendance, and goal tracking for Harris Ahmed.
+        </p>
       </section>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-4">
         <StatCard icon={Users} label="Total members" value={members.length} />
-        <StatCard icon={DollarSign} label="Unpaid / overdue" value={unpaidCount} accent="blood" />
-        <StatCard icon={CalendarX} label="Missed sessions" value={missedCount} accent="brass" />
-        <StatCard icon={ShieldCheck} label="Avg. goal progress" value={`${avgGoal}%`} />
+        <StatCard
+          icon={DollarSign}
+          label="Unpaid / overdue"
+          value={unpaidCount}
+          accent="blood"
+        />
+        <StatCard
+          icon={CalendarX}
+          label="Missed sessions"
+          value={missedCount}
+          accent="brass"
+        />
+        <StatCard
+          icon={ShieldCheck}
+          label="Avg. goal progress"
+          value={`${avgGoal}%`}
+        />
       </section>
 
       <section className="glass-panel rounded-2xl p-6">
@@ -54,7 +79,9 @@ export default function AdminMembers() {
                 type="button"
                 onClick={() => setFilter(f.id)}
                 className={`rounded-md px-3 py-1.5 text-xs font-semibold transition ${
-                  filter === f.id ? 'bg-ember text-ink' : 'bg-white/5 text-white/50 hover:bg-white/10'
+                  filter === f.id
+                    ? "bg-ember text-ink"
+                    : "bg-white/5 text-white/50 hover:bg-white/10"
                 }`}
               >
                 {f.label}
@@ -87,7 +114,10 @@ export default function AdminMembers() {
             </thead>
             <tbody>
               {filtered.map((member) => (
-                <tr key={member.id} className="border-b border-line/60 last:border-0">
+                <tr
+                  key={member.id}
+                  className="border-b border-line/60 last:border-0"
+                >
                   <td className="py-3">
                     <p className="font-semibold text-white">{member.name}</p>
                     <TierBadge tier={member.tier} />
@@ -95,16 +125,22 @@ export default function AdminMembers() {
                   <td className="py-3 text-white/60">{member.phone}</td>
                   <td className="py-3">
                     <p className="mb-1 text-white/70">
-                      {member.sessionsAttended}/{member.sessionsTotal} &middot; {member.attendanceRate}%
+                      {member.sessionsAttended}/{member.sessionsTotal} &middot;{" "}
+                      {member.attendanceRate}%
                     </p>
-                    <ProgressBar value={member.attendanceRate} accent={member.attendanceRate < 60 ? 'blood' : 'ember'} />
+                    <ProgressBar
+                      value={member.attendanceRate}
+                      accent={member.attendanceRate < 60 ? "blood" : "ember"}
+                    />
                   </td>
                   <td className="py-3">
                     <Badge status={member.paymentStatus} />
                   </td>
                   <td className="py-3">
                     <div className="w-28">
-                      <p className="mb-1 text-white/70">{member.goalProgress}%</p>
+                      <p className="mb-1 text-white/70">
+                        {member.goalProgress}%
+                      </p>
                       <ProgressBar value={member.goalProgress} accent="brass" />
                     </div>
                   </td>
@@ -132,5 +168,5 @@ export default function AdminMembers() {
         </div>
       </section>
     </div>
-  )
+  );
 }
